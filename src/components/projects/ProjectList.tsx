@@ -5,7 +5,7 @@ import { ErrorState } from "@/components/shared/ErrorState"
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner"
 import { Pagination } from "@/components/shared/Pagination"
 import { useProjectList } from "@/hooks/useProjects"
-import type { EzFilterParams } from "@/lib/serialiseFilters"
+import type { EzFilterParams } from "@/types/filters"
 import { ProjectCard } from "./ProjectCard"
 
 export function ProjectList({
@@ -21,11 +21,11 @@ export function ProjectList({
 
   if (isLoading) return <LoadingSpinner />
   if (isError) return <ErrorState message="Failed to load projects" onRetry={() => void refetch()} />
-  if (!data?.data.length) return <EmptyState message="No projects found" />
+  if (!data?.data.length) return <EmptyState message="No projects match this view." />
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+      <div className="space-y-2">
         {data.data.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
@@ -40,4 +40,3 @@ export function ProjectList({
     </div>
   )
 }
-

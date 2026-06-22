@@ -7,10 +7,3 @@ export const STATUS_LABELS: Record<TaskStatus, string> = {
   BLOCKED: "Blocked",
 }
 
-export const STATUS_COLORS: Record<TaskStatus, string> = {
-  BACKLOG: "var(--nw-backlog)",
-  IN_PROGRESS: "var(--nw-in-progress)",
-  DONE: "var(--nw-success)",
-  BLOCKED: "var(--nw-blocked)",
-}
-

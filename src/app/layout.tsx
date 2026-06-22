@@ -3,7 +3,7 @@ import { Providers } from "@/components/layout/Providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NodeWave",
+  title: "NodeWave Workspace",
   description: "Project delivery workspace",
 };
 

@@ -4,7 +4,8 @@ import { ErrorState } from "@/components/shared/ErrorState"
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner"
 import { Pagination } from "@/components/shared/Pagination"
 import { useAuditLog } from "@/hooks/useAuditLog"
-import type { EzFilterParams } from "@/lib/serialiseFilters"
+import type { EzFilterParams } from "@/types/filters"
+import type { AuditLog } from "@/types/audit"
 
 export function AuditLogTable({
   projectId,
@@ -23,30 +24,14 @@ export function AuditLogTable({
   if (isError) return <ErrorState message="Failed to load audit log" onRetry={() => void refetch()} />
 
   return (
-    <div className="overflow-hidden rounded-lg border border-[--nw-border] bg-[--nw-surface]">
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-[--nw-background] text-[--nw-text-secondary]">
-            <tr>
-              <th className="px-4 py-3">Who</th>
-              <th className="px-4 py-3">When</th>
-              <th className="px-4 py-3">Field</th>
-              <th className="px-4 py-3">Old value</th>
-              <th className="px-4 py-3">New value</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(data?.data ?? []).map((row) => (
-              <tr className="border-t border-[--nw-border]" key={row.id}>
-                <td className="px-4 py-3">{row.user?.name ?? "System"}</td>
-                <td className="px-4 py-3">{new Date(row.createdAt).toLocaleString()}</td>
-                <td className="px-4 py-3">{row.changedField}</td>
-                <td className="px-4 py-3 text-[--nw-text-muted]">{row.oldValue ?? "-"}</td>
-                <td className="px-4 py-3 text-[--nw-text-primary]">{row.newValue ?? "-"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="border border-[var(--nw-border)] bg-[var(--nw-surface)]">
+      <div className="space-y-0 p-4 md:p-6">
+        {(data?.data ?? []).map((row) => (
+          <AuditEntry key={row.id} row={row} />
+        ))}
+        {!data?.data.length && (
+          <p className="py-10 text-center text-[13px] text-[var(--nw-text-muted)]">No changes have been recorded.</p>
+        )}
       </div>
       <div className="p-4">
         <Pagination
@@ -61,3 +46,28 @@ export function AuditLogTable({
   )
 }
 
+function AuditEntry({ row }: { row: AuditLog }) {
+  return (
+    <article className="relative border-l border-[var(--nw-border)] pb-6 pl-5 last:pb-0">
+      <span className="absolute -left-[5px] top-1 size-2.5 rounded-full border border-[var(--nw-border)] bg-[var(--nw-surface)]" />
+      <div className="grid gap-2 md:grid-cols-[180px_1fr]">
+        <time className="font-mono text-[11px] leading-5 text-[var(--nw-text-muted)]" dateTime={row.createdAt}>
+          {new Date(row.createdAt).toLocaleString()}
+        </time>
+        <div>
+          <p className="text-[13px] leading-6 text-[var(--nw-text-primary)]">
+            <span className="font-medium">{row.user?.name ?? "System"}</span> changed{" "}
+            <span className="font-mono text-[12px]">{row.changedField}</span> from{" "}
+            <span className="text-[var(--nw-text-muted)]">{formatValue(row.oldValue)}</span> to{" "}
+            <span>{formatValue(row.newValue)}</span>.
+          </p>
+          <p className="mt-1 font-mono text-[11px] text-[var(--nw-text-muted)]">{row.user?.id ?? "system"}</p>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function formatValue(value: string | null) {
+  return value?.trim() ? value : "empty"
+}

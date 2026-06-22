@@ -1,11 +1,9 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { ErrorState } from "@/components/shared/ErrorState"
 import { EmptyState } from "@/components/shared/EmptyState"
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner"
-import { useTaskList } from "@/hooks/useTasks"
-import type { EzFilterParams } from "@/lib/serialiseFilters"
 import type { Task, TaskStatus } from "@/types/task"
 import { TaskColumn } from "./TaskColumn"
 
@@ -18,20 +16,24 @@ const COLUMNS: { status: TaskStatus; label: string }[] = [
 
 export function TaskBoard({
   projectId,
-  params,
+  tasks,
+  isLoading,
+  isError,
+  refetch,
 }: {
   projectId: string
-  params?: EzFilterParams
+  tasks: Task[]
+  isLoading: boolean
+  isError: boolean
+  refetch: () => void
 }) {
-  const [baseParams] = useState<EzFilterParams>({ page: 1, rows: 50 })
-  const queryParams = params ?? baseParams
-  const { data, isError, isLoading, refetch } = useTaskList(projectId, queryParams)
-  const tasks = data?.data ?? []
   const tasksByStatus = useMemo(
     () =>
       tasks.reduce<Record<TaskStatus, Task[]>>(
         (acc, task) => {
-          acc[task.status].push(task)
+          if (acc[task.status]) {
+            acc[task.status].push(task)
+          }
           return acc
         },
         { BACKLOG: [], IN_PROGRESS: [], BLOCKED: [], DONE: [] }
@@ -41,10 +43,10 @@ export function TaskBoard({
 
   if (isLoading) return <LoadingSpinner />
   if (isError) return <ErrorState message="Failed to load tasks" onRetry={() => void refetch()} />
-  if (!tasks.length) return <EmptyState message="No tasks yet" />
+  if (!tasks.length) return <EmptyState message="No tasks match this board view." />
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+    <div className="flex gap-4 overflow-x-auto pb-3 md:grid md:grid-cols-4 md:overflow-visible">
       {COLUMNS.map((col) => (
         <TaskColumn
           key={col.status}

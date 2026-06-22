@@ -16,17 +16,17 @@ export function Topbar() {
   }
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-[--nw-border] bg-[--nw-surface] px-4 md:px-6">
+    <header className="flex h-16 items-center justify-between border-b border-[var(--nw-border)] bg-[var(--nw-background)]/85 px-4 backdrop-blur md:px-6">
       <div>
-        <p className="text-sm font-medium text-[--nw-text-primary]">{user?.name ?? "NodeWave"}</p>
+        <p className="text-[13px] font-medium text-[var(--nw-text-primary)]">{user?.name ?? "NodeWave"}</p>
         {user && (
-          <span className="mt-1 inline-flex rounded-full bg-[--nw-primary-light] px-2 py-0.5 text-xs font-medium text-[--nw-primary]">
+          <span className="mt-1 inline-flex border-l border-[var(--nw-primary)] pl-2 font-mono text-[11px] text-[var(--nw-text-muted)]">
             {user.role}
           </span>
         )}
       </div>
       <button
-        className="inline-flex h-9 items-center gap-2 rounded-md border border-[--nw-border] px-3 text-sm text-[--nw-text-primary] hover:border-[--nw-primary]"
+        className="inline-flex h-9 items-center gap-2 rounded-md border border-[var(--nw-border)] bg-[var(--nw-surface)] px-3 text-[13px] text-[var(--nw-text-primary)] transition hover:border-[var(--nw-primary)]"
         onClick={handleLogout}
         type="button"
       >
@@ -36,4 +36,3 @@ export function Topbar() {
     </header>
   )
 }
-

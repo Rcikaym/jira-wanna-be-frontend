@@ -27,17 +27,22 @@ export function Sidebar() {
   const links = user ? linksByRole[user.role] : []
 
   return (
-    <aside className="border-[--nw-border] bg-[--nw-secondary] text-white md:min-h-screen md:w-64 md:border-r">
-      <div className="flex h-16 items-center px-5 text-lg font-semibold">NodeWave</div>
-      <nav className="flex gap-1 overflow-x-auto px-3 pb-3 md:flex-col md:overflow-visible">
+    <aside className="border-[var(--nw-border)] bg-[var(--nw-surface)]/95 text-[var(--nw-text-primary)] md:min-h-screen md:w-[214px] md:border-r">
+      <div className="flex h-16 items-center border-b border-[var(--nw-border)] px-5">
+        <div className="border-l border-[var(--nw-border)] pl-3">
+          <p className="text-[15px] font-semibold tracking-[0.08em] uppercase">NodeWave</p>
+          <p className="mt-0.5 text-[11px] text-[var(--nw-text-muted)]">Workspace</p>
+        </div>
+      </div>
+      <nav className="flex gap-1 overflow-x-auto px-2 py-3 md:flex-col md:overflow-visible">
         {links.map((link) => {
           const Icon = link.icon
           const active = pathname === link.href || pathname.startsWith(`${link.href}/`)
           return (
             <Link
               className={cn(
-                "flex min-w-fit items-center gap-2 rounded-md border-l-4 border-transparent px-3 py-2 text-sm text-white/75 transition",
-                active && "border-[--nw-primary] bg-[--nw-primary-light] text-[--nw-primary]"
+                "flex min-w-fit items-center gap-3 border-l border-transparent px-4 py-3 text-[13px] font-medium text-[var(--nw-text-secondary)] transition hover:border-[var(--nw-border)] hover:bg-[var(--nw-primary-light)] hover:text-[var(--nw-text-primary)]",
+                active && "border-[var(--nw-primary)] bg-[var(--nw-primary-light)] text-[var(--nw-text-primary)]"
               )}
               href={link.href}
               key={link.href}
@@ -51,4 +56,3 @@ export function Sidebar() {
     </aside>
   )
 }
-

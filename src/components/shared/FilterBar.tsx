@@ -1,24 +1,24 @@
-import type { TaskStatus } from "@/types/task"
+import type React from "react"
 
-export function FilterBar({
-  status,
-  onStatusChange,
-}: {
-  status: TaskStatus | ""
-  onStatusChange: (status: TaskStatus | "") => void
-}) {
-  return (
-    <select
-      className="h-10 rounded-md border border-[--nw-border] bg-[--nw-surface] px-3 text-sm text-[--nw-text-primary]"
-      onChange={(event) => onStatusChange(event.target.value as TaskStatus | "")}
-      value={status}
-    >
-      <option value="">All statuses</option>
-      <option value="BACKLOG">Backlog</option>
-      <option value="IN_PROGRESS">In Progress</option>
-      <option value="BLOCKED">Blocked</option>
-      <option value="DONE">Done</option>
-    </select>
-  )
+type Props = {
+  children: React.ReactNode
+  onReset?: () => void
+  hasActiveFilters?: boolean
 }
 
+export function FilterBar({ children, onReset, hasActiveFilters }: Props) {
+  return (
+    <div className="flex flex-wrap items-center gap-2 py-2">
+      {children}
+      {hasActiveFilters && onReset && (
+        <button
+          onClick={onReset}
+          type="button"
+          className="text-xs text-(--nw-primary) underline underline-offset-2 hover:text-(--nw-primary-hover) cursor-pointer transition-colors"
+        >
+          Clear all filters
+        </button>
+      )}
+    </div>
+  )
+}

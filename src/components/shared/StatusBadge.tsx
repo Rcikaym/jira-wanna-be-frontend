@@ -1,5 +1,5 @@
+import { STATUS_LABELS } from "@/lib/status"
 import { cn } from "@/lib/utils"
-import { STATUS_COLORS, STATUS_LABELS } from "@/lib/status"
 import type { TaskStatus } from "@/types/task"
 
 export function StatusBadge({
@@ -14,18 +14,12 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex w-fit items-center rounded-full border px-2 font-medium",
-        size === "xs" ? "py-0.5 text-[11px]" : "py-1 text-xs",
+        "inline-flex w-fit items-center gap-1.5 border-l border-(--nw-border) pl-2 font-medium text-(--nw-text-primary)",
+        size === "xs" ? "text-[11px]" : "text-xs",
         className
       )}
-      style={{
-        borderColor: STATUS_COLORS[status],
-        color: STATUS_COLORS[status],
-        backgroundColor: "color-mix(in srgb, currentColor 10%, transparent)",
-      }}
     >
       {STATUS_LABELS[status]}
     </span>
   )
 }
-

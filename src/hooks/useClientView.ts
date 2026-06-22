@@ -1,9 +1,10 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, keepPreviousData } from "@tanstack/react-query"
 import { api } from "@/lib/axios"
 import { queryKeys } from "@/lib/queryKeys"
-import { type EzFilterParams, serialiseFilters } from "@/lib/serialiseFilters"
+import { serialiseFilters } from "@/lib/serialiseFilters"
+import type { EzFilterParams } from "@/types/filters"
 import type { ApiResponse, PaginatedResponse } from "@/types/api"
 import type { ProjectSummary } from "@/types/project"
 import type { ClientTask } from "@/types/task"
@@ -32,6 +33,7 @@ export function useClientTasks(projectId: string, params: EzFilterParams) {
         .get(`/client/projects/${projectId}/tasks`, { params: serialiseFilters(params) })
         .then((r) => r.data as PaginatedResponse<ClientTask>),
     enabled: !!projectId,
+    placeholderData: keepPreviousData,
   })
 }
 

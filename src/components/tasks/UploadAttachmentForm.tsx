@@ -10,6 +10,7 @@ export function UploadAttachmentForm({ taskId, projectId }: { taskId: string; pr
 
   return (
     <form
+      encType="multipart/form-data"
       onSubmit={(event) => {
         event.preventDefault()
         const file = inputRef.current?.files?.[0]
@@ -17,9 +18,9 @@ export function UploadAttachmentForm({ taskId, projectId }: { taskId: string; pr
       }}
     >
       <div className="flex flex-wrap gap-2">
-        <input className="text-sm" ref={inputRef} type="file" />
+        <input className="text-step-1" ref={inputRef} type="file" />
         <button
-          className="inline-flex h-9 items-center gap-2 rounded-md bg-[--nw-primary] px-3 text-sm font-medium text-white disabled:opacity-60"
+          className="inline-flex h-9 items-center gap-2 rounded-md bg-(--nw-primary) px-3 text-step-1 font-medium text-(--nw-surface) disabled:opacity-60"
           disabled={isPending}
           type="submit"
         >
@@ -30,4 +31,3 @@ export function UploadAttachmentForm({ taskId, projectId }: { taskId: string; pr
     </form>
   )
 }
-
