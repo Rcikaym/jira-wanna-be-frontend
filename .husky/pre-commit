@@ -1,2 +1,2 @@
-npm run lint
-npx tsc --noEmit
+bun run lint
+bunx tsc --noEmit
